@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Snap & Study</title>
+
+
+    <style>
+
+        /* =========================================
+           GENERAL
+        ========================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        header {
+            background: white;
+            padding: 28px 20px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        header p {
+            margin-top: 10px;
+            color: #666;
+            font-size: 16px;
+        }
+
+
+        /* =========================================
+           MAIN CONTAINER
+        ========================================= */
+
+        .container {
+            max-width: 950px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+
+        /* =========================================
+           UPLOAD CARD
+        ========================================= */
+
+        .upload-card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .upload-card h2 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+
+        .upload-card p {
+            color: #666;
+        }
+
+
+        /* =========================================
+           FILE INPUT
+        ========================================= */
+
+        .file-wrapper {
+            margin: 20px 0;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+
+        /* =========================================
+           IMAGE PREVIEW
+        ========================================= */
+
+        #preview {
+            display: none;
+            max-width: 100%;
+            width: 350px;
+            max-height: 300px;
+            object-fit: contain;
+            margin: 20px auto;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+        }
+
+
+        /* =========================================
+           ANALYZE BUTTON
+        ========================================= */
+
+        .analyze-button {
+            padding: 13px 28px;
+            border: none;
+            border-radius: 9px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .analyze-button:hover {
+            background: #1d4ed8;
+        }
+
+        .analyze-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+
+        /* =========================================
+           STATUS
+        ========================================= */
+
+        #status {
+            text-align: center;
+            margin: 22px 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .success {
+            color: #16a34a;
+        }
+
+        .error {
+            color: #dc2626;
+        }
+
+        .loading {
+            color: #2563eb;
+        }
+
+
+        /* =========================================
+           RESULT CARDS
+        ========================================= */
+
+        .result-card {
+            background: white;
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+        }
+
+        .result-card h2 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .result-card p {
+            line-height: 1.7;
+            color: #444;
+        }
+
+
+        /* =========================================
+           TOPIC
+        ========================================= */
+
+        .topic-card {
+            text-align: center;
+        }
+
+        .topic {
+            font-size: 30px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+
+        /* =========================================
+           LISTS
+        ========================================= */
+
+        ul,
+        ol {
+            padding-left: 25px;
+        }
+
+        li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+
+        /* =========================================
+           IMPORTANT TERMS
+        ========================================= */
+
+        .term {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+        }
+
+        .term-name {
+            font-weight: 700;
+            font-size: 17px;
+            margin-bottom: 6px;
+        }
+
+        .term-meaning {
+            color: #555;
+            line-height: 1.5;
+        }
+
+
+        /* =========================================
+           QUIZ
+        ========================================= */
+
+        .quiz-question {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            line-height: 1.5;
+        }
+
+        .quiz-question-text {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #222;
+        }
+
+        .quiz-option {
+            display: block;
+            padding: 10px;
+            margin: 7px 0;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: #eef2ff;
+        }
+
+        .quiz-option input {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+
+        /* =========================================
+           CHECK ANSWERS BUTTON
+        ========================================= */
+
+        .check-button {
+            display: block;
+            margin: 25px auto 10px;
+            padding: 13px 28px;
+            border: none;
+            border-radius: 9px;
+            background: #16a34a;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .check-button:hover {
+            background: #15803d;
+        }
+
+
+        /* =========================================
+           QUIZ RESULT
+        ========================================= */
+
+        #quizResult {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            display: none;
+        }
+
+        .quiz-correct {
+            border: 2px solid #16a34a;
+        }
+
+        .quiz-wrong {
+            border: 2px solid #dc2626;
+        }
+
+
+        /* =========================================
+           HIDDEN
+        ========================================= */
+
+        .hidden {
+            display: none;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 600px) {
+
+            header h1 {
+                font-size: 26px;
+            }
+
+            .container {
+                padding: 0 12px;
+            }
+
+            .upload-card {
+                padding: 20px;
+            }
+
+            .result-card {
+                padding: 20px;
+            }
+
+            .topic {
+                font-size: 24px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header>
+
+        <h1>📚 Snap & Study</h1>
+
+        <p>
+            Turn your study images into simple AI explanations.
+        </p>
+
+    </header>
+
+
+
+    <main class="container">
+
+
+        <!-- =====================================
+             UPLOAD SECTION
+        ====================================== -->
+
+        <section class="upload-card">
+
+            <h2>📷 Upload Study Material</h2>
+
+            <p>
+                Take a photo or select a study image.
+            </p>
+
+
+            <div class="file-wrapper">
+
+                <input
+                    type="file"
+                    id="imageInput"
+                    accept="image/*"
+                    capture="environment"
+                >
+
+            </div>
+
+
+            <!-- IMAGE PREVIEW -->
+
+            <img
+                id="preview"
+                alt="Selected study image"
+            >
+
+
+            <!-- ANALYZE BUTTON -->
+
+            <button
+                id="analyzeButton"
+                class="analyze-button"
+                onclick="uploadImage()"
+            >
+                🔍 Analyze Image
+            </button>
+
+        </section>
+
+
+
+        <!-- =====================================
+             STATUS
+        ====================================== -->
+
+        <div id="status"></div>
+
+
+
+        <!-- =====================================
+             AI RESULTS
+        ====================================== -->
+
+        <section
+            id="results"
+            class="hidden"
+        >
+
+
+            <!-- =================================
+                 TOPIC
+            ================================== -->
+
+            <div class="result-card topic-card">
+
+                <h2>📚 Topic</h2>
+
+                <div
+                    id="topic"
+                    class="topic"
+                >
+                    -
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 WHAT IS IT?
+            ================================== -->
+
+            <div class="result-card">
+
+                <h2>💡 What is it?</h2>
+
+                <p id="whatIsIt">
+                    -
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================
+                 HOW DOES IT WORK?
+            ================================== -->
+
+            <div class="result-card">
+
+                <h2>⚙️ How does it work?</h2>
+
+                <ol id="howItWorks"></ol>
+
+            </div>
+
+
+
+            <!-- =================================
+                 SIMPLE EXAMPLE
+            ================================== -->
+
+            <div class="result-card">
+
+                <h2>🧩 Simple Example</h2>
+
+                <p id="simpleExample">
+                    -
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================
+                 REAL WORLD EXAMPLES
+            ================================== -->
+
+            <div class="result-card">
+
+                <h2>🌍 Real-World Examples</h2>
+
+                <ul id="realWorldExamples"></ul>
+
+            </div>
+
+
+
+            <!-- =================================
+                 IMPORTANT TERMS
+            ================================== -->
+
+            <div class="result-card">
+
+                <h2>📖 Important Terms</h2>
+
+                <div id="importantTerms"></div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 QUICK REVISION
+            ================================== -->
+
+            <div class="result-card">
+
+                <h2>⚡ Quick Revision</h2>
+
+                <ul id="quickRevision"></ul>
+
+            </div>
+
+
+
+            <!-- =================================
+                 QUIZ
+            ================================== -->
+
+            <div class="result-card">
+
+                <h2>🧠 Quiz Questions</h2>
+
+                <div id="quizQuestions"></div>
+
+
+                <!-- CHECK ANSWERS -->
+
+                <button
+                    id="checkButton"
+                    class="check-button"
+                    onclick="checkQuiz()"
+                >
+                    ✅ Check Answers
+                </button>
+
+
+                <!-- SCORE -->
+
+                <div id="quizResult"></div>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <script>
+
+
+        // ==================================================
+        // GLOBAL QUIZ DATA
+        // ==================================================
+
+        let currentQuiz = [];
+
+
+
+        // ==================================================
+        // GET HTML ELEMENTS
+        // ==================================================
+
+        const imageInput =
+            document.getElementById("imageInput");
+
+        const preview =
+            document.getElementById("preview");
+
+        const status =
+            document.getElementById("status");
+
+        const results =
+            document.getElementById("results");
+
+        const analyzeButton =
+            document.getElementById("analyzeButton");
+
+
+
+        // ==================================================
+        // IMAGE PREVIEW
+        // ==================================================
+
+        imageInput.addEventListener(
+            "change",
+            function () {
+
+                const file =
+                    imageInput.files[0];
+
+
+                if (!file) {
+
+                    preview.style.display = "none";
+
+                    return;
+                }
+
+
+                const imageURL =
+                    URL.createObjectURL(file);
+
+
+                preview.src =
+                    imageURL;
+
+
+                preview.style.display =
+                    "block";
+
+
+                status.textContent =
+                    "";
+
+                
+                results.classList.add(
+                    "hidden"
+                );
+
+            }
+        );
+
+
+
+        // ==================================================
+        // UPLOAD IMAGE
+        // ==================================================
+
+        async function uploadImage() {
+
+
+            const file =
+                imageInput.files[0];
+
+
+            // ----------------------------------------------
+            // CHECK IMAGE
+            // ----------------------------------------------
+
+            if (!file) {
+
+                status.textContent =
+                    "⚠️ Please select an image first.";
+
+                status.className =
+                    "error";
+
+                return;
+            }
+
+
+
+            // ----------------------------------------------
+            // LOADING
+            // ----------------------------------------------
+
+            status.textContent =
+                "⏳ Analyzing image and teaching the topic...";
+
+            status.className =
+                "loading";
+
+
+            analyzeButton.disabled =
+                true;
+
+
+            results.classList.add(
+                "hidden"
+            );
+
+
+            // ----------------------------------------------
+            // RESET QUIZ
+            // ----------------------------------------------
+
+            currentQuiz = [];
+
+
+            document.getElementById(
+                "quizQuestions"
+            ).innerHTML = "";
+
+
+            document.getElementById(
+                "quizResult"
+            ).style.display = "none";
+
+
+
+            // ----------------------------------------------
+            // FORM DATA
+            // ----------------------------------------------
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "file",
+                file
+            );
+
+
+
+            try {
+
+
+                // ==========================================
+                // SEND IMAGE TO BACKEND
+                // ==========================================
+
+                const response =
+                    await fetch(
+                        "http://127.0.0.1:8000/upload",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
+
+                // ==========================================
+                // CHECK RESPONSE
+                // ==========================================
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Backend returned an error."
+                    );
+
+                }
+
+
+
+                // ==========================================
+                // READ RESPONSE
+                // ==========================================
+
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "Backend response:",
+                    data
+                );
+
+
+
+                // ==========================================
+                // CHECK BACKEND ERROR
+                // ==========================================
+
+                if (data.error) {
+
+                    throw new Error(
+                        data.error
+                    );
+
+                }
+
+
+
+                // ==========================================
+                // GET AI RESPONSE
+                // ==========================================
+
+                let aiData;
+
+
+                if (
+                    typeof data.ai_response ===
+                    "string"
+                ) {
+
+                    let jsonText =
+                        data.ai_response.trim();
+
+
+                    // --------------------------------------
+                    // Remove ```json
+                    // --------------------------------------
+
+                    if (
+                        jsonText.startsWith(
+                            "```json"
+                        )
+                    ) {
+
+                        jsonText =
+                            jsonText
+                                .replace(
+                                    /^```json\s*/,
+                                    ""
+                                )
+                                .replace(
+                                    /\s*```$/,
+                                    ""
+                                );
+
+                    }
+
+
+                    // --------------------------------------
+                    // Remove ```
+                    // --------------------------------------
+
+                    else if (
+                        jsonText.startsWith(
+                            "```"
+                        )
+                    ) {
+
+                        jsonText =
+                            jsonText
+                                .replace(
+                                    /^```\s*/,
+                                    ""
+                                )
+                                .replace(
+                                    /\s*```$/,
+                                    ""
+                                );
+
+                    }
+
+
+                    aiData =
+                        JSON.parse(
+                            jsonText
+                        );
+
+                }
+
+                else {
+
+                    aiData =
+                        data.ai_response;
+
+                }
+
+
+
+                console.log(
+                    "Structured AI data:",
+                    aiData
+                );
+
+
+
+                // ==========================================
+                // DISPLAY TOPIC
+                // ==========================================
+
+                document.getElementById(
+                    "topic"
+                ).textContent =
+                    aiData.topic ||
+                    "Topic not found";
+
+
+
+                // ==========================================
+                // DISPLAY WHAT IS IT
+                // ==========================================
+
+                document.getElementById(
+                    "whatIsIt"
+                ).textContent =
+                    aiData.what_is_it ||
+                    "Explanation not available.";
+
+
+
+                // ==========================================
+                // DISPLAY HOW IT WORKS
+                // ==========================================
+
+                const howItWorks =
+                    document.getElementById(
+                        "howItWorks"
+                    );
+
+
+                howItWorks.innerHTML =
+                    "";
+
+
+                const steps =
+                    Array.isArray(
+                        aiData.how_does_it_work
+                    )
+                        ? aiData.how_does_it_work
+                        : [];
+
+
+                steps.forEach(
+                    function (step) {
+
+                        const li =
+                            document.createElement(
+                                "li"
+                            );
+
+
+                        li.textContent =
+                            step;
+
+
+                        howItWorks.appendChild(
+                            li
+                        );
+
+                    }
+                );
+
+
+
+                // ==========================================
+                // DISPLAY SIMPLE EXAMPLE
+                // ==========================================
+
+                document.getElementById(
+                    "simpleExample"
+                ).textContent =
+                    aiData.simple_example ||
+                    "Example not available.";
+
+
+
+                // ==========================================
+                // DISPLAY REAL WORLD EXAMPLES
+                // ==========================================
+
+                const realWorldExamples =
+                    document.getElementById(
+                        "realWorldExamples"
+                    );
+
+
+                realWorldExamples.innerHTML =
+                    "";
+
+
+                const examples =
+                    Array.isArray(
+                        aiData.real_world_examples
+                    )
+                        ? aiData.real_world_examples
+                        : [];
+
+
+                examples.forEach(
+                    function (example) {
+
+                        const li =
+                            document.createElement(
+                                "li"
+                            );
+
+
+                        li.textContent =
+                            example;
+
+
+                        realWorldExamples.appendChild(
+                            li
+                        );
+
+                    }
+                );
+
+
+
+                // ==========================================
+                // DISPLAY IMPORTANT TERMS
+                // ==========================================
+
+                const importantTerms =
+                    document.getElementById(
+                        "importantTerms"
+                    );
+
+
+                importantTerms.innerHTML =
+                    "";
+
+
+                const terms =
+                    Array.isArray(
+                        aiData.important_terms
+                    )
+                        ? aiData.important_terms
+                        : [];
+
+
+                terms.forEach(
+                    function (item) {
+
+                        const div =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        div.className =
+                            "term";
+
+
+                        const termName =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        termName.className =
+                            "term-name";
+
+
+                        termName.textContent =
+                            item.term ||
+                            "Term";
+
+
+                        const termMeaning =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        termMeaning.className =
+                            "term-meaning";
+
+
+                        termMeaning.textContent =
+                            item.meaning ||
+                            "Meaning not available.";
+
+
+                        div.appendChild(
+                            termName
+                        );
+
+
+                        div.appendChild(
+                            termMeaning
+                        );
+
+
+                        importantTerms.appendChild(
+                            div
+                        );
+
+                    }
+                );
+
+
+
+                // ==========================================
+                // DISPLAY QUICK REVISION
+                // ==========================================
+
+                const quickRevision =
+                    document.getElementById(
+                        "quickRevision"
+                    );
+
+
+                quickRevision.innerHTML =
+                    "";
+
+
+                const revisionPoints =
+                    Array.isArray(
+                        aiData.quick_revision
+                    )
+                        ? aiData.quick_revision
+                        : [];
+
+
+                revisionPoints.forEach(
+                    function (point) {
+
+                        const li =
+                            document.createElement(
+                                "li"
+                            );
+
+
+                        li.textContent =
+                            point;
+
+
+                        quickRevision.appendChild(
+                            li
+                        );
+
+                    }
+                );
+
+
+
+                // ==========================================
+                // DISPLAY QUIZ
+                // ==========================================
+
+                currentQuiz =
+                    Array.isArray(
+                        aiData.quiz_questions
+                    )
+                        ? aiData.quiz_questions
+                        : [];
+
+
+                displayQuiz(
+                    currentQuiz
+                );
+
+
+
+                // ==========================================
+                // SHOW RESULTS
+                // ==========================================
+
+                results.classList.remove(
+                    "hidden"
+                );
+
+
+                status.textContent =
+                    "✅ Analysis completed!";
+
+
+                status.className =
+                    "success";
+
+            }
+
+
+            // ==============================================
+            // ERROR
+            // ==============================================
+
+            catch (error) {
+
+                console.error(
+                    "Error:",
+                    error
+                );
+
+
+                status.textContent =
+                    "❌ " + error.message;
+
+
+                status.className =
+                    "error";
+
+            }
+
+
+            // ==============================================
+            // ENABLE BUTTON
+            // ==============================================
+
+            finally {
+
+                analyzeButton.disabled =
+                    false;
+
+            }
+
+        }
+
+
+
+        // ==================================================
+        // DISPLAY QUIZ
+        // ==================================================
+
+        function displayQuiz(
+            questions
+        ) {
+
+
+            const quizContainer =
+                document.getElementById(
+                    "quizQuestions"
+                );
+
+
+            quizContainer.innerHTML =
+                "";
+
+
+            if (
+                !questions ||
+                questions.length === 0
+            ) {
+
+                quizContainer.textContent =
+                    "Quiz questions not available.";
+
+                return;
+            }
+
+
+
+            questions.forEach(
+                function (quiz, index) {
+
+
+                    // --------------------------------------
+                    // QUESTION BOX
+                    // --------------------------------------
+
+                    const questionBox =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    questionBox.className =
+                        "quiz-question";
+
+
+                    // --------------------------------------
+                    // QUESTION TEXT
+                    // --------------------------------------
+
+                    const questionText =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    questionText.className =
+                        "quiz-question-text";
+
+
+                    questionText.textContent =
+                        `${index + 1}. ${
+                            quiz.question ||
+                            "Question not available."
+                        }`;
+
+
+                    questionBox.appendChild(
+                        questionText
+                    );
+
+
+
+                    // --------------------------------------
+                    // OPTIONS
+                    // --------------------------------------
+
+                    const options =
+                        Array.isArray(
+                            quiz.options
+                        )
+                            ? quiz.options
+                            : [];
+
+
+                    options.forEach(
+                        function (
+                            option,
+                            optionIndex
+                        ) {
+
+
+                            const label =
+                                document.createElement(
+                                    "label"
+                                );
+
+
+                            label.className =
+                                "quiz-option";
+
+
+                            const radio =
+                                document.createElement(
+                                    "input"
+                                );
+
+
+                            radio.type =
+                                "radio";
+
+
+                            radio.name =
+                                `question-${index}`;
+
+
+                            radio.value =
+                                option;
+
+
+                            radio.id =
+                                `question-${index}-option-${optionIndex}`;
+
+
+                            const optionText =
+                                document.createTextNode(
+                                    option
+                                );
+
+
+                            label.appendChild(
+                                radio
+                            );
+
+
+                            label.appendChild(
+                                optionText
+                            );
+
+
+                            questionBox.appendChild(
+                                label
+                            );
+
+                        }
+                    );
+
+
+
+                    // --------------------------------------
+                    // ADD QUESTION TO PAGE
+                    // --------------------------------------
+
+                    quizContainer.appendChild(
+                        questionBox
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        // ==================================================
+        // CHECK QUIZ
+        // ==================================================
+
+        function checkQuiz() {
+
+
+            if (
+                !currentQuiz ||
+                currentQuiz.length === 0
+            ) {
+
+                return;
+            }
+
+
+            let score = 0;
+
+            let answered = 0;
+
+
+
+            // ==========================================
+            // CHECK EACH QUESTION
+            // ==========================================
+
+            currentQuiz.forEach(
+                function (
+                    quiz,
+                    index
+                ) {
+
+
+                    const selected =
+                        document.querySelector(
+                            `input[name="question-${index}"]:checked`
+                        );
+
+
+                    if (selected) {
+
+                        answered++;
+
+
+                        if (
+                            selected.value ===
+                            quiz.answer
+                        ) {
+
+                            score++;
+
+                        }
+
+                    }
+
+                }
+            );
+
+
+
+            // ==========================================
+            // SHOW SCORE
+            // ==========================================
+
+            const quizResult =
+                document.getElementById(
+                    "quizResult"
+                );
+
+
+            quizResult.style.display =
+                "block";
+
+
+            quizResult.className =
+                "";
+
+
+            if (
+                answered <
+                currentQuiz.length
+            ) {
+
+                quizResult.textContent =
+                    `⚠️ Please answer all questions. You answered ${answered} of ${currentQuiz.length}.`;
+
+
+                quizResult.style.color =
+                    "#dc2626";
+
+
+                return;
+            }
+
+
+
+            // ==========================================
+            // FINAL SCORE
+            // ==========================================
+
+            quizResult.textContent =
+                `🏆 Your Score: ${score} / ${currentQuiz.length}`;
+
+
+            if (
+                score ===
+                currentQuiz.length
+            ) {
+
+                quizResult.textContent +=
+                    " 🎉 Perfect!";
+
+                quizResult.style.color =
+                    "#16a34a";
+
+            }
+
+            else if (
+                score >=
+                Math.ceil(
+                    currentQuiz.length * 0.6
+                )
+            ) {
+
+                quizResult.textContent +=
+                    " 👍 Good job!";
+
+                quizResult.style.color =
+                    "#2563eb";
+
+            }
+
+            else {
+
+                quizResult.textContent +=
+                    " 📚 Keep practicing!";
+
+                quizResult.style.color =
+                    "#dc2626";
+
+            }
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
